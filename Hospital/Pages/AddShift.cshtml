@@ -1,0 +1,96 @@
+﻿@page
+@{ ViewData["Page"] = "Add";
+    List<Shift> shifts = data.SELECTShift();
+    var max = shifts.Max(p => p.codeShift) + 1;
+    string dateNew = data.Convert(DateTime.Today.ToShortDateString());
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">  הוספת משמרת</div>
+<div id="inputDiv">
+
+    <div>
+        <div>קוד משמרת</div>
+        <input type="number" min="@max" max="@max" id="codeShift" class="textbox" value="@max" />
+    </div>
+    <div>
+        <div>אחות</div>
+        <select id="selectNurse">
+            <option code="-1" value=" " id="emptyNurse"> </option>
+            @foreach (var p in data.SELECTNurse())
+            {
+                <option code="@p.idNurse" value="@p.nameNurse">@p.nameNurse</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>מספר חדר</div>
+        <select id="selectRoom">
+            <option code="-1" value=" " id="emptyRoom"> </option>
+            @foreach (var p in data.SELECTRoom())
+            {
+                <option code="@p.misRoom" value="@p.misRoom">@p.misRoom</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>שעת התחלה</div>
+        <input type="time" id="startTime" class="textbox" />
+    </div>
+    <div>
+        <div>שעת סיום</div>
+        <input type="time" id="finishTime" class="textbox" />
+    </div>
+    <div>
+        <div>תאריך</div>
+        <input type="date" id="date1" class="textbox" value="@dateNew" min="@dateNew" />
+    </div>
+</div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="Shift" id="links">&lArr;חזרה </a>
+</div>
+<span id="messege"></span>
+<script>
+    document.getElementById('Add').addEventListener('click', function (e) {
+        var data = {};
+        data['codeShift'] = document.getElementById('codeShift').value;
+        data['codeNurse'] = document.querySelector('#selectNurse').options[document.querySelector('#selectNurse').selectedIndex].getAttribute("code");
+        data['codeRoom'] = document.querySelector('#selectRoom').options[document.querySelector('#selectRoom').selectedIndex].getAttribute("code");
+        data['startTime'] = document.getElementById('startTime').value;
+        data['finishTime'] = document.getElementById('finishTime').value;
+        data['date1'] = document.getElementById('date1').value;
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Shifts/AddShift', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('messege').innerHTML = req.responseText;
+        }
+        req.send(JSON.stringify(data));
+    });
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'API/Shifts/', true);
+        req.onload = function () {
+            location.reload();
+            document.getElementById("codeShift").value = req.responseText;
+            document.getElementById("codeShift").min = req.responseText;
+            document.getElementById("codeShift").max = req.responseText;
+        }
+        req.send();
+
+    });
+    document.querySelector('#selectRoom').addEventListener('change', myfunction2, false);
+    function myfunction2() {
+        document.querySelector('#selectRoom').remove(document.querySelector('#emptyRoom'));
+        document.querySelector('#selectRoom').removeEventListener('change', myfunction2, false);
+    }
+    document.querySelector('#selectNurse').addEventListener('change', myfunction1, false);
+    function myfunction1() {
+        document.querySelector('#selectNurse').remove(document.querySelector('#emptyNurse'));
+        document.querySelector('#selectNurse').removeEventListener('change', myfunction1, false);
+    }
+</script>

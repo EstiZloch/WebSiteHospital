@@ -1,0 +1,192 @@
+﻿@page
+@{ ViewData["Page"] = "Display";
+    List<City> cities = data.SELECTCity();
+    var max = cities.Max(p => p.codeCity);
+    string dateNew = data.Convert(DateTime.Today.ToShortDateString());
+}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">קבלת חולה</div>
+<div id="btn">
+    <div id="insert" onclick="func2()">להכנסת פרטים</div>
+</div>
+<div id="recieve">
+    <div>
+        <div>תעודת זהות</div>
+        <input type="text" id="idPatient" class="textbox" />
+    </div>
+    <div>
+        <div>שם</div>
+        <input type="text" id="namePatient" class="textbox" />
+    </div>
+    <div>
+        <div>תאריך לידה</div>
+        <input type="date" id="dateBirth" class="textbox" value="@dateNew" max="@dateNew" />
+    </div>
+    <div>
+        <div>תאריך קבלה</div>
+        <span id="dateRecieved" class="textbox">@DateTime.Today.ToShortDateString()</span>
+    </div>
+    <div>
+        <div>עיר</div>
+        <select  id="selectCity">
+            <option code="-1" value=" " id="emptyCity"> </option>
+            @foreach (var p in data.SELECTCity())
+            {
+                <option code="@p.codeCity" value="@p.nameCity">@p.nameCity</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>תיאור</div>
+        <input type="text" id="describe" class="textbox" />
+    </div>
+</div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="btns">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+</div>
+<div id="selects">
+    <div id="Department">
+        <span>לבחירת מחלקה</span>
+        <div>
+            <select class="select" id="select">
+                <option code="-1" value=" " id="emptyDep"> </option>
+                @foreach (var p in data.SELECTDepartment())
+                {
+                    <option code="@p.codeDepartment" value="@p.nameDepartment">@p.nameDepartment</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div id="Diagnosis">
+        <span>לבחירת אבחון</span>
+        <div>
+            <select class="select" id="selectDiag">
+            </select>
+        </div>
+    </div>
+    <div id="Rooms">
+        <span>לבחירת חדר</span>
+        <div>
+            <select class="select" id="selectRoom">
+            </select>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelector('#select').addEventListener('change', function (e) {
+
+        document.getElementById('emptyDep').style.display = "none";
+        document.getElementById('Diagnosis').style.display = "flex";
+        var req = new XMLHttpRequest();
+        req.open('GET', 'API/Diagnosis/' + e.target.options[e.target.selectedIndex].getAttribute("code"), true);
+        req.onload = function () {
+            document.getElementById('selectDiag').innerHTML = '    <option code="-1" value=" "  id="emptyDiag"> </option>';
+            if (req.responseText == '[]') {
+                document.getElementById("messege").innerHTML = 'אין אבחונים במחלקה המבוקשת';
+            }
+            else {
+
+                var data = JSON.parse(req.responseText);
+                for (var i = 0; i < data.length; i++)
+                    document.getElementById('selectDiag').innerHTML += '<option code="' + data[i].codeDiagnosis + '"  value = "' + data[i].diagnosis + '" > ' + data[i].diagnosis + '</option > ';
+            }
+        }
+        req.send();
+    });
+    function func2() {
+        document.getElementById('recieve').style.display = "block";
+        document.getElementById('btns').style.display = "flex";
+        document.getElementById('insert').style.display = "none";
+        document.getElementById('selects').style.display = "block";
+    }
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        location.reload();
+    });
+    document.getElementById('Add').addEventListener('click', function (e) {
+        var data = {};
+        data['idPatient'] = document.getElementById("idPatient").value;
+        data['namePatient'] = document.getElementById("namePatient").value;
+        data['dateBirth'] = document.getElementById("dateBirth").value;
+        data['dateResived'] = document.getElementById("dateRecieved").innerHTML;
+        data['codeCity'] = document.querySelector('#selectCity').options[document.querySelector('#selectCity').selectedIndex].getAttribute("code");
+        data['describe'] = document.getElementById("describe").value;
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Patients/AddPatient', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById("Department").style.display = "flex";
+
+        }
+        req.send(JSON.stringify(data));
+    });
+    document.querySelector('#selectDiag').addEventListener('change', function (e) {
+        document.querySelector('#emptyDiag').style.display = 'none';
+        var data = {};
+        data['idPatient'] = document.getElementById("idPatient").value;
+        data['namePatient'] = document.getElementById("namePatient").value;
+        data['dateBirth'] = document.getElementById("dateBirth").value;
+        data['dateResived'] = document.getElementById("dateRecieved").innerHTML;
+        data['codeCity'] = document.querySelector('#selectCity').options[document.querySelector('#selectCity').selectedIndex].getAttribute("code");
+        data['describe'] = document.getElementById("describe").value;
+        data['codeRoom'] = 0;
+        data['codeDiagnosis'] = e.target.options[e.target.selectedIndex].getAttribute("code");
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Patients/UpdatePatient', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+        req.onload = function () {
+        }
+
+        req.send(JSON.stringify(data));
+        var req = new XMLHttpRequest();
+
+        req.open('GET', 'API/Rooms/' + document.querySelector('#select').options[document.querySelector('#select').selectedIndex].getAttribute("code") + '/find', true);
+        req.onload = function () {
+            document.getElementById('selectRoom').innerHTML = '    <option code="-1" value=" "  id="emptyRoom"> </option>';
+            if (req.responseText == '[]') {
+                document.getElementById("Rooms").style.display = "none";
+                document.getElementById("messege").style.display = 'block';
+                document.getElementById("messege").innerHTML = 'אין חדרים פנויים במחלקה המבוקשת';
+            }
+            else {
+                document.getElementById("Rooms").style.display = "flex";
+                var data = JSON.parse(req.responseText);
+                for (var i = 0; i < data.length; i++)
+                    document.getElementById('selectRoom').innerHTML += '<option  value = "' + data[i].misRoom + '" > ' + data[i].misRoom + '</option > ';
+                document.getElementById("messege").style.display = 'none';
+            }
+        }
+        req.send();
+    });
+    document.querySelector('#selectRoom').addEventListener('change', function (e) {
+        document.querySelector('#emptyRoom').style.display = 'none';
+        var data = {};
+        data['idPatient'] = document.getElementById("idPatient").value;
+        data['namePatient'] = document.getElementById("namePatient").value;
+        data['dateBirth'] = document.getElementById("dateBirth").value;
+        data['dateResived'] = document.getElementById("dateRecieved").innerHTML;
+        data['codeCity'] = document.querySelector('#selectCity').options[document.querySelector('#selectCity').selectedIndex].getAttribute("code");
+        data['describe'] = document.getElementById("describe").value;
+        data['codeRoom'] = e.target.options[e.target.selectedIndex].value;
+        data['codeDiagnosis'] = document.querySelector('#selectDiag').options[document.querySelector('#selectDiag').selectedIndex].getAttribute("code");
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Patients/UpdatePatient', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('messege').innerHTML = '!!!!!!!!!!!!!החולה הוסף בהצלחה';
+            document.getElementById('messege').style.display = 'flex';
+            document.getElementById('messege').style.color = '#df74a0';
+        }
+        req.send(JSON.stringify(data));
+    });
+    document.querySelector('#selectCity').addEventListener('change', myfunction, false);
+    function myfunction() {
+        document.querySelector('#selectCity').remove(document.querySelector('#emptyCity'));
+        document.querySelector('#selectCity').removeEventListener('change', myfunction, false);
+    }
+</script>

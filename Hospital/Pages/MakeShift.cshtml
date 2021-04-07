@@ -1,0 +1,126 @@
+﻿@page
+@{ ViewData["Page"] = "Display";
+    List<Shift> shifts = data.SELECTShift();
+    var max = shifts.Max(p => p.codeShift)+1;
+    string dateNew = data.Convert(DateTime.Today.ToShortDateString());
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">יצירת משמרת</div>
+<div id="Shift">
+    <div id="special">
+        <div>חדר</div>
+        <select class="select" id="selectRoom">
+            <option code="-1"  id="emptyRoom" value="בחר חדר">בחר חדר</option>
+            @foreach (var p in data.SELECTRoom())
+            {
+                <option value="@p.misRoom">@p.misRoom</option>
+            }
+        </select>
+    </div>
+
+    <div id="dateShift">
+        <div>תאריך המשמרת</div>
+        <input type="date" value="@dateNew" min="@dateNew" id="date" />
+    </div>
+    <div id="type">
+        <div>סוג המשמרת</div>
+        <select class="select" id="selectType">
+            <option code="-1"  id="emptyType" value="בחר חדר">בחר טווח שעות</option>
+            <option startTime="06:00" finishTime="14:00" value="06:00-14:00">06:00-14:00</option>
+            <option startTime="14:00" finishTime="22:00" value="14:00-22:00">14:00-22:00</option>
+            <option startTime="22:00" finishTime="06:00" value="22:00-06:00">22:00-06:00</option>
+        </select>
+    </div>
+    <div id="nurse">
+        <div>אחות</div>   
+        <select class="select" id="selectNurse">
+            <option code="-1" id="emptyNurse" value="בחר אחות">בחר אחות</option>
+        </select>
+    </div>
+</div>
+<div class="popup" id="messege">
+    <div>
+        <h3>קיימת כבר משמרת זו בבקשה שנה פרטים</h3>
+        <h4><span id="mess"></span></h4>
+        <div id="Act">
+            <span id="cancelBtn" onclick="location.reload()">חזור</span>
+        </div>
+    </div>
+</div>
+<div id="divmessege"><span id="end"></span></div>
+<script>
+    document.querySelector('#selectRoom').addEventListener('change', function (e) {
+
+        document.getElementById('dateShift').style.display = 'flex';
+        document.getElementById('end').style.display = 'none';
+        document.querySelector('#emptyRoom').style.display = 'none';
+    });
+    document.querySelector('#dateShift').addEventListener('change', function (e) {
+
+        document.getElementById('type').style.display = 'flex';
+        document.getElementById('end').style.display = 'none';
+    });
+    document.querySelector('#selectType').addEventListener('change', function (e) {
+        document.querySelector('#emptyType').style.display = 'none';
+            var data = {};
+        data['codeShift'] = 1;
+        data['codeRoom'] = document.querySelector('#selectRoom').options[document.querySelector('#selectRoom').selectedIndex].value;
+            data['codeNurse'] = '000000000';
+        data['startTime'] = document.querySelector('#selectType').options[document.querySelector('#selectType').selectedIndex].getAttribute("startTime");
+        data['finishTime'] = document.querySelector('#selectType').options[document.querySelector('#selectType').selectedIndex].getAttribute("finishTime");
+            data['date1'] = document.getElementById("date").value;
+            var req = new XMLHttpRequest();
+        req.open('POST', 'API/Shifts/checkShift', true);
+            req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('selectNurse').innerHTML = '<option code="-1" id="emptyNurse" value="בחר אחות">בחר אחות</option>';
+            document.getElementById('end').style.display = 'none';
+            if (req.responseText == 1) {
+                document.getElementById('messege').classList.toggle('popupAct', true);
+            }
+                else
+                {
+                document.getElementById('nurse').style.display = 'flex';
+                var req1 = new XMLHttpRequest();
+                req1.open('POST', 'API/Nurses/FreeNurse', true);
+                req1.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                req1.onload = function () {
+                    var data = JSON.parse(req1.responseText);
+                    for (var i = 0; i < data.length; i++)
+                        document.getElementById('selectNurse').innerHTML += '<option  id="' + data[i].idNurse + '"  value = "' + data[i].nameNurse + '" > ' + data[i].nameNurse + '</option > ';
+                }
+                req1.send(JSON.stringify(data));
+                }
+            }
+            req.send(JSON.stringify(data));
+    });
+    document.querySelector('#selectNurse').addEventListener('change', function (e) {
+        document.getElementById('emptyNurse').style.display = 'none';
+        var data = {};
+        data['codeShift'] =@max;
+        data['codeRoom'] = document.querySelector('#selectRoom').options[document.querySelector('#selectRoom').selectedIndex].value;
+        data['codeNurse'] = document.querySelector('#selectNurse').options[document.querySelector('#selectNurse').selectedIndex].getAttribute("id")
+        data['startTime'] = document.querySelector('#selectType').options[document.querySelector('#selectType').selectedIndex].getAttribute("startTime");
+        data['finishTime'] = document.querySelector('#selectType').options[document.querySelector('#selectType').selectedIndex].getAttribute("finishTime");
+        data['date1'] = document.getElementById("date").value;
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Shifts/checkShift', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('selectNurse').innerHTML = '<option code="-1" id="emptyNurse" value="בחר אחות">בחר אחות</option>';
+            document.getElementById('end').style.display = 'none';
+            if (req.responseText != 1) {
+                var req1 = new XMLHttpRequest();
+                req1.open('POST', 'API/Shifts/AddShift', true);
+                req1.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                req1.onload = function () {
+                    document.getElementById('end').innerHTML = '!!!!!!!!!!!!!המשמרת נוספה בהצלחה';
+                    document.getElementById('end').style.display = 'flex';
+                    document.getElementById('end').style.color = '#df74a0';
+                }
+                req1.send(JSON.stringify(data));
+            }
+        }
+        req.send(JSON.stringify(data));
+    });
+</script>

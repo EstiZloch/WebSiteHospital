@@ -1,0 +1,161 @@
+﻿@page
+@{
+    ViewData["Page"] = "Display";
+    var d = 0;
+    List<Room> rooms = data.SELECTRoom();
+    List<Shift> Shifts = data.SELECTShift();
+    List<Nurse> nurse = data.SELECTNurse();
+    var misRooms = rooms.Count;
+    var max = rooms.Max(p => p.misRoom);
+    DBFile db = new DBFile();
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div>
+    <div id="tytle">:משמרות</div>
+</div>
+<table id="table">
+    <thead>
+        <tr>
+            <th>קוד</th>
+            <th>ת.ז. אחות</th>
+            <th>מספר חדר</th>
+            <th>שעת התחלה</th>
+            <th>שעת סיום</th>
+            <th>תאריך</th>
+            <th class="delete">מחיקה</th>
+            <th class="update">עדכון</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Shifts)
+        {
+            <tr class="@(d<5?"start":"finish")">
+                <td>@p.codeShift</td>
+                <td>@nurse.First(i => i.idNurse.Equals(p.codeNurse)).nameNurse</td>
+                <td>@p.codeRoom</td>
+                <td>@p.startTime</td>
+                <td>@p.finishTime</td>
+                <td>@p.date1</td>
+                <td class="deleteBtn" onclick="document.getElementById('deleteRow').classList.toggle('popupAct', true); document.getElementById('delete').innerHTML =@p.codeShift" ;>מחק</td>
+                <td class="updateBtn" onclick="document.getElementById('upDateRow').classList.toggle('popupAct', true); document.getElementById('update1').innerHTML = '@p.codeShift'; document.getElementById('selectRoom').selectedIndex = @p.codeRoom-@max-1 +@misRooms; document.getElementById('selectNurse').selectedIndex =@db.NurseIndex(p.codeNurse); document.getElementById('update4').value = '@DateTime.Parse(p.startTime).ToShortTimeString()'; document.getElementById('update5').value = '@DateTime.Parse(p.finishTime).ToShortTimeString()'; document.getElementById('update6').value = '@data.Convert(p.date1)'" ;>עדכן פרטים</td>
+            </tr>
+            d++;
+        }
+
+
+    </tbody>
+</table>
+<div class="popup" id="deleteRow">
+    <div>
+        <h3>האם ברצונך למחוק את המשמרת?</h3>
+        <h4>קוד המשמרת למחיקה:<span id="delete"></span></h4>
+        <div id="Act">
+            <span id="deleteAll">מחק</span>
+            <span id="cancelBtn" onclick="document.getElementById('deleteRow').classList.toggle('popupAct', false)">בטל</span>
+        </div>
+
+    </div>
+</div>
+<div class="popup" id="upDateRow">
+    <div>
+        <h3>?האם ברצונך לעדכן את המשמרת</h3>
+        <h4>
+            <span>קוד</span> 
+            <span id="update1"></span>
+        </h4>
+        <h4>
+            <span>תעודת זהות</span>
+        </h4>
+        <div>
+            <span>אחות</span>
+            <div>
+                <select class="select" id="selectNurse">
+
+                    @foreach (var p in data.SELECTNurse())
+                    {
+                        <option code="@p.idNurse" value="@p.nameNurse">@p.nameNurse</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div>
+            <div>
+                <span>מספר חדר</span>
+                <div>
+                    <select class="select" id="selectRoom">
+
+                        @foreach (var p in data.SELECTRoom())
+                        {
+                            <option code="@p.misRoom" value="@p.misRoom">@p.misRoom</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <h4>
+            <span> שעת התחלה</span> 
+            <input id="update4" type="time">
+        </h4>
+        <h4>
+            <span> שעת סיום</span>
+            <input id="update5" type="time">
+        </h4>
+        <h4>
+            <span>תאריך</span>  
+            <input id="update6" type="date">
+        </h4>
+
+        <div id="Act">
+            <span id="deleteBtn">עדכן</span>
+            <span id="cancelBtn" onclick="document.getElementById('upDateRow').classList.toggle('popupAct', false)">בטל</span>
+        </div>
+
+    </div>
+</div>
+<div id="linkInPages">
+    <a href="AddShift" id="links">| להוספת משמרת </a>
+    <a href="MakeShift" id="links">| ליצירת משמרת |</a>
+</div>
+<script>
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Shifts/DeleteShift', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        document.getElementById('deleteRow').classList.toggle('popupAct', false);
+        req.onload = function () {
+            document.getElementById('table').innerHTML = '';
+            if (req.responseText > 0)
+                location.reload();
+        }
+        req.send(document.getElementById('delete').innerHTML);
+    });
+    document.getElementById("deleteBtn").addEventListener('click', function (e) {
+        var data = {};
+        data['codeShift'] = document.getElementById('update1').innerHTML;
+        data['codeNurse'] = document.querySelector('#selectNurse').options[document.querySelector('#selectNurse').selectedIndex].getAttribute('code');
+        data['codeRoom'] = document.querySelector('#selectRoom').options[document.querySelector('#selectRoom').selectedIndex].getAttribute('code');
+        data['startTime'] = document.getElementById('update4').value;
+        data['finishTime'] = document.getElementById('update5').value;
+        data['date1'] = document.getElementById('update6').value;
+        console.log(data);
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Shifts/UpdateShift', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('upDateRow').classList.toggle('popupAct', false);
+            location.reload();
+        }
+        req.send(JSON.stringify(data));
+    });
+    //document.querySelector('#select').addEventListener('change', function (e) {
+    //    console.log(e);//האיבנט בעצמו
+    //    console.log(e.target);//האלמנט עליו הופעל האיבנט
+    //    console.log(e.target.options);//כל הערכים
+    //    console.log(e.target.options[2]);//הערך השלישי
+    //    console.log(e.target.selectedIndex);//מקום הפריט הנבחר
+    //    console.log(e.target.options[e.target.selectedIndex]);//הפריט הנבחר
+    //    console.log(e.target.options[e.target.selectedIndex].value);//שם הפריט הנבחר
+    //    console.log(e.target.options[e.target.selectedIndex].getAttribute("code"));//האטריביוט של הפריט הנבחר
+    //});
+</script>

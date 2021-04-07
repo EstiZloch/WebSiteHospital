@@ -1,0 +1,108 @@
+﻿@page
+@{ ViewData["Page"] = "Add";
+    List<City> cities = data.SELECTCity();
+    var max = cities.Max(p => p.codeCity);
+    string dateNew = data.Convert(DateTime.Today.ToShortDateString());
+    var myindex = "תאונה קשה";
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">הוספת לקוח</div>
+
+<div id="inputDiv">
+
+    <div>
+        <div>תעודת זהות</div>
+        <input type="text" id="idPatient" class="textbox" />
+    </div>
+    <div>
+        <div>שם</div>
+        <input type="text" id="namePatient" class="textbox" />
+    </div>
+    <div>
+        <div>תאריך לידה</div>
+        <input type="date" id="dateBirth" class="textbox" value="@dateNew" max="@dateNew" />
+    </div>
+    <div>
+        <div>תאריך כניסה</div>
+        <input type="date" id="dateResived" class="textbox" value="@dateNew" />
+    </div>
+    <div>
+        <div>עיר</div>
+        <select id="selectCity">
+            <option code="-1" value=" " id="emptyCity"> </option>
+            @foreach (var p in data.SELECTCity())
+            {
+                <option code="@p.codeCity" value="@p.nameCity">@p.nameCity</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>תיאור</div>
+        <input type="text" id="describe" class="textbox" />
+    </div>
+    <div>
+        <div>חדר</div>
+        <select id="selectRoom">
+            <option code="-1" value=" " id="emptyRoom"> </option>
+            @foreach (var p in data.SELECTRoom())
+            {
+                <option code="@p.misRoom" value="@p.misRoom">@p.misRoom</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>אבחון</div>
+        <select id="selectDiag" >
+            <option code="-1" value=" " id="emptyDiag"> </option>
+            @foreach (var p in data.SELECTDiagnosis())
+            {
+                <option code="@p.codeDiagnosis" value="@p.diagnosis">@p.diagnosis</option>
+            }
+        </select>
+    </div>
+</div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="Patiant" id="links">&lArr;חזרה </a>
+</div>
+<script>
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        location.reload();
+    });
+    document.getElementById('Add').addEventListener('click', function (e) {
+        var data = {};
+        data['idPatient'] = document.getElementById("idPatient").value;
+        data['namePatient'] = document.getElementById("namePatient").value;
+        data['dateBirth'] = document.getElementById("dateBirth").value;
+        data['dateResived'] = document.getElementById("dateResived").value;
+        data['codeCity'] = document.querySelector('#selectCity').options[document.querySelector('#selectCity').selectedIndex].getAttribute("code");
+        data['describe'] = document.getElementById("describe").value;
+        data['codeRoom'] = document.querySelector('#selectRoom').options[document.querySelector('#selectRoom').selectedIndex].getAttribute("code");
+        data['codeDiagnosis'] = document.querySelector('#selectDiag').options[document.querySelector('#selectDiag').selectedIndex].getAttribute("code");
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Patients/AddPatient', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+          
+        }
+        req.send(JSON.stringify(data));
+    });
+    document.querySelector('#selectCity').addEventListener('change', myfunction1, false);
+    function myfunction1() {
+        document.querySelector('#selectCity').remove(document.querySelector('#emptyCity'));
+        document.querySelector('#selectCity').removeEventListener('change', myfunction1, false);
+    }
+    document.querySelector('#selectRoom').addEventListener('change', myfunction2, false);
+    function myfunction2() {
+        document.querySelector('#selectRoom').remove(document.querySelector('#emptyRoom'));
+        document.querySelector('#selectRoom').removeEventListener('change', myfunction2, false);
+    }
+    document.querySelector('#selectDiag').addEventListener('change', myfunction3, false);
+    function myfunction3() {
+        document.querySelector('#selectDiag').remove(document.querySelector('#emptyDiag'));
+        document.querySelector('#selectDiag').removeEventListener('change', myfunction3, false);
+    }
+</script>

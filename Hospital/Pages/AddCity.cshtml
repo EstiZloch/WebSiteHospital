@@ -1,0 +1,52 @@
+﻿@page
+@{ ViewData["Page"] = "Add";
+    List<City> cities = data.SELECTCity();
+    var max = cities.Max(p => p.codeCity) + 1;
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle"> הוספת ערים</div>
+<div id="inputDiv">
+
+    <div>
+        <div>קוד עיר</div>
+        <input type="number" min="@max" id="codeCity" class="textbox" value="@max" max="@max" />
+    </div>
+    <div>
+        <div>שם עיר</div>
+        <input type="text" id="nameCity" class="textbox" />
+    </div>
+</div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="City" id="links">&lArr;חזרה </a>
+</div>
+<script>
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'API/Cities/', true);
+        req.onload = function () {
+            location.reload();
+            document.getElementById("codeCity").value = Number(req.responseText) + 1;
+            document.getElementById("codeCity").min = Number(req.responseText) + 1;
+            document.getElementById("codeCity").max = Number(req.responseText) + 1;
+        }
+        req.send();
+    });
+    document.getElementById('Add').addEventListener('click', function (e) {
+        var data = {};
+        data['codeCity'] = document.getElementById('codeCity').value;
+        data['nameCity'] = document.getElementById('nameCity').value;
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Cities/AddCity', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('messege').innerHTML = req.responseText;
+        }
+        req.send(JSON.stringify(data));
+    });
+</script>
+

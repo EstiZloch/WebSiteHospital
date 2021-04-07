@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hospital</title>
+    @*<link href="~/css/StyleSheet.css" rel="stylesheet" />*@
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    <link href="~/css/styleHospital.css" rel="stylesheet" />
+</head>
+<body>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*@data.CreateDB();*@
+    @*@data.CreateDepartment();*@
+    @*@data.CreateNurse();*@
+    @*@data.CreatePatient();
+    @data.CreateRoom();*@
+    @*@data.CreateShift();*@
+    @*@data.CreateDiagnosis();*@
+    <div id="Wrapper" class="class1">
+        <div>
+            <h1> בית חולים</h1>
+            <h2>ניהול מסד נתונים בית חולים</h2>
+            <div id="link">
+                <a href="City" id="links">| ערים </a>
+                <a href="Department" id="links">| מחלקות </a>
+                <a href="Patiant" id="links">| לקוחות</a>
+                <a href="Nurse" id="links">| אחיות</a>
+                <a href="Room" id="links">| חדרים</a>
+                <a href="shift" id="links">| משמרות</a>
+                <a href="Diagnoses" id="links">| אבחונים </a>
+                <a href="ResievingPatient" id="links">| קבלת חולה</a>
+                <a href="MakeShift" id="links">| יצירת משמרת</a>
+                <a href="PatientDetails" id="links">| לפרטי החולים |</a>
+            </div>
+            <div id="content" class="@ViewData["Page"]">
+                @RenderBody()
+            </div>
+        </div>
+        <h3>אסתי זלוצ'בסקי </h3>
+        <div id="picture">
+            <img style="width:100%" src="~/lib/אסתי 1.jpg" />
+        </div>
+        <br />
+        <h3>@DateTime.Now.ToString(format: "dd-MM-yyyy - HH:mm:ss")</h3>
+    </div>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

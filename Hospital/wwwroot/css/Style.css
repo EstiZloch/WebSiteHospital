@@ -1,0 +1,616 @@
+﻿body {
+}
+a {
+    color: #0366d6;
+}
+#Act {
+    display: flex;
+    justify-content: space-between;
+    max-width: 35%;
+    margin: auto;
+}
+#Act > span {
+        color: #320909;
+        border: 1px solid #320909;
+        padding: 2px 5px;
+        border-radius: 5px;
+        margin:5px;
+    }
+#Act > span:hover {
+            color: white;
+            border: 1px solid #320909;
+            background-color: #320909;
+            padding: 2px 5px;
+            border-radius: 5px;
+            cursor: grab;
+        }
+.Add {
+    margin: auto;
+    max-height: 95%;
+    max-width: 95%;
+    border: #68525d 1px solid;
+}
+[place="after"] {
+    text-decoration: underline;
+    color: #68525d;
+}
+#before {
+    color: #df74a0;
+}
+#btn > div:hover {
+    color: white;
+    background-color: #500b41;
+    padding: 2px 5px;
+    border-radius: 5px;
+    cursor: grab;
+}
+.btnApi {
+    border: 1px solid #500b41;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+.btnApi:hover {
+        color: white;
+        background-color: #500b41;
+        padding: 2px 5px;
+        border-radius: 5px;
+        cursor: grab;
+    }
+#btn {
+    max-height: 40px;
+    max-width: 150px;
+    min-height: 40px;
+    min-width: 150px;
+    margin: 0px auto;
+    display: flex;
+}
+#btns {
+    max-height: 80px;
+    max-width: 150px;
+    min-height: 80px;
+    min-width: 150px;
+    margin: 20px auto;
+    display: none;
+    flex-direction: column;
+}
+#btn > div {
+        color: #500b41;
+        border: 1px solid #500b41;
+        padding: 2px 5px;
+        border-radius: 5px;
+        background-color: white;
+        margin: auto;
+    }
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+    width: 6px;
+    height: 2px;
+    border-radius: 30%;
+    display: block;
+    margin: 20PX auto;
+}
+#date {
+    min-width: 200px;
+    max-width: 200px;
+    font-size: 17px;
+}
+#dateRecieved {
+    min-width: 425px;
+}
+#dateShift {
+    display: none;
+}
+.deleteBtn {
+    border: 1px solid #500b41;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+.deleteBtn:hover {
+        color: white;
+        background-color: #500b41;
+        padding: 2px 5px;
+        border-radius: 5px;
+        cursor: grab;
+    }
+#Department {
+    display: none;
+    max-width: 700px;
+    min-width: 700px;
+    margin: auto;
+    direction: rtl;
+}
+#Department > select {
+        flex: 2;
+    }
+#Department > div {
+        flex: 2;
+        max-width: 100px;
+        min-width: 100px;
+    }
+#det{
+    margin:auto;
+    max-width:500px;
+    min-width:500px;
+    direction:rtl;
+}
+#detail {
+    display: none;
+    max-width: 700px;
+    min-width: 700px;
+    margin: 100px auto;
+}
+#details {
+    display: block;
+}
+#detailtytle{
+    font-size:20px;
+    text-decoration:underline;
+}
+#Diagnosis {
+    display: flex;
+    max-width: 700px;
+    min-width: 700px;
+    margin: auto;
+    direction: rtl;
+}
+#Diagnosis {
+    display: none;
+}
+#Diagnosis > select {
+        flex: 2;
+    }
+#Diagnosis > div {
+        flex: 2;
+        max-width: 100px;
+        min-width: 100px;
+    }
+.Display {
+    margin: auto;
+    max-height: 95%;
+    max-width: 95%;
+    border: #df74a0 1px solid;
+}
+#divCon {
+    margin: 15px auto 0px;
+    max-width: 500px;
+    min-width: 500px;
+    border: #df74a0 1px solid;
+    text-align: center;
+    font-size: 15px;
+    display: none;
+}
+#divCon > table{
+    margin:  auto ;
+    max-width:400px;
+}
+#divlist {
+    margin: 15px auto 0px;
+    max-height: 80px;
+    max-width: 200px;
+    min-height: 80px;
+    min-width: 200px;
+    display: none;
+    border: #df74a0 1px solid;
+    text-align: center;
+    font-size: 15px;
+    margin: 10px auto 10px;
+    text-decoration: underline;
+}
+#divmessege {
+    margin: auto;
+    max-height: 20px;
+    max-width: 300px;
+    min-height: 20px;
+    min-width: 300px;
+}
+.finish {
+    background-color: white;
+}
+.h2 {
+    text-decoration: underline;
+    font-size: 20px;
+    color: #860e49;
+    text-align: center;
+}
+img {
+    width: 100%;
+}
+#inputDiv {
+    max-width: 600px;
+    min-width: 600px;
+    margin: 100px auto
+}
+#inputDiv > div {
+        direction: rtl;
+        display: flex;
+        margin: 5px auto;
+    }
+#inputDiv > div div {
+            flex: 2;
+        }
+#inputDiv > div input {
+            flex: 5;
+        }
+#inputDiv > div input:focus {
+                box-shadow: 3px,1px,1px,rgba(31,95,180,0.3)
+            }
+.link {
+    margin: 5px 550px;
+    max-height: 40px;
+    max-width: 400px;
+    min-height: 40px;
+    min-width: 400px;
+    color: #320909;
+    font-size: 15px;
+}
+#link {
+    margin: 15px 350px;
+    max-height: 40px;
+    max-width: 650px;
+    min-height: 40px;
+    min-width: 650px;
+}
+#linkbtn {
+    max-height: 80px;
+    max-width: 150px;
+    min-height: 80px;
+    min-width: 150px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+}
+#links {
+    margin: auto;
+    color: #320909;
+    font-size: 15px;
+}
+#linkInPages {
+    margin: 15px 500px;
+    max-height: 40px;
+    max-width: 650px;
+    min-height: 40px;
+    min-width: 650px;
+}
+#messege
+{
+    color:red;
+    font-size:15px;
+
+}
+#nurse {
+    display: none;
+}
+ol {
+    font-size: 13px;
+    direction: rtl;
+    text-align: right;
+}
+.old {
+    color: #df74a0;
+}
+#picture {
+    max-height: 130px;
+    min-height: 130px;
+    max-width: 100px;
+    min-width: 100px;
+    margin: auto;
+}
+.popupAct {
+    display: flex !important;
+}
+.popup {
+    background-color: rgba(31,95,180,0.3);
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+.popup > div {
+        background-color: white;
+        padding:20px;
+       
+    }
+.popup > div h4 {
+        direction: rtl;
+        display: flex;
+    }
+.popup > div div {
+            direction: rtl;
+            display: flex;
+            font-size: 18px;
+            margin: 5px 0px;
+        }
+.popup > div div span {
+    flex: 2;
+}
+.popup > div h4 span {
+    flex: 2;
+}
+.popup > div h4 input {
+    flex: 5;
+    max-width:200px;
+}
+#Rooms {
+    display: none;
+}
+#recieve {
+    display: none;
+    max-width: 600px;
+    min-width: 600px;
+    margin: 30px auto;
+}
+#recieve > div {
+    direction: rtl;
+    display: flex;
+    margin: 5px auto;
+}
+#recieve > div div {
+        flex: 2;
+    }
+#recieve > div input {
+        flex: 5;
+    }
+#recieve > div input:focus {
+            box-shadow: 3px,1px,1px,rgba(31,95,180,0.3)
+        }
+#recieve > div select {
+        flex: 5;
+    }
+#Rooms {
+    display: none;
+    max-width: 700px;
+    min-width: 700px;
+    margin: auto;
+    direction: rtl;
+}
+#Rooms > select {
+        flex: 2;
+    }
+#Rooms > div {
+        flex: 2;
+        max-width: 100px;
+        min-width: 100px;
+    }
+select {
+    direction: rtl;
+    min-width: 430px;
+    max-width: 430px;
+}
+.select {
+    direction: rtl;
+    min-width: 200px;
+    max-width: 200px;
+    font-size:17px;
+}
+#selects > div {
+    direction: rtl;
+    display: none;
+    margin: 5px auto;
+    min-width: 300px;
+    max-width: 300px
+}
+#selects > div span{
+flex:2;
+}
+#selects > div select {
+        flex: 5;
+    }
+#Shift {
+    max-width: 400px;
+    min-width: 400px;
+    margin: 100px auto; 
+    direction: rtl;
+    margin: 5px auto;
+}
+#Shift > div{
+display:none;
+margin:5px auto;
+}
+#Shift > div>div {
+      flex:2;
+    }
+#Shift > div > select {
+        flex: 4;
+    }
+#special{
+    display:flex !important;}
+#startline {
+    min-width: 500px;
+    min-height: 500px;
+}
+.start {
+    color: #df74a0;
+}
+table {
+    margin: 15px auto;
+    padding: 1.5px;
+    border-collapse: collapse;
+    direction:rtl;
+}
+#tableRes {
+    margin: 10px auto 10px;
+}
+#tableresult {
+    display: none;
+}
+td {
+    text-align: center;
+    border: 0.3px solid #320909;
+    font-size: 16px;
+}
+th {
+    text-align: center !important;
+    background: #df74a0;
+    color: white;
+    border: 0.3px solid #320909;
+}
+thead {
+    border: 0.3px solid #320909;
+}
+tr {
+    border: 0.3px solid #320909;
+    min-width: 15px;
+}
+#twotable {
+    display: flex;
+    direction: rtl;
+}
+#type {
+    display: none;
+}
+.tytle {
+    margin: 0px auto;
+}
+#tytle {
+    margin: 15px 550px;
+    display: flex;
+    max-height: 40px;
+    max-width: 150px;
+    min-height: 40px;
+    min-width: 150px;
+    font-size:20px;
+    text-decoration:underline;
+}
+#update1 {
+    text-decoration: underline;
+}
+.updateBtn {
+    border: 1px solid #500b41;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+.updateBtn:hover {
+        color: white;
+        background-color: #500b41;
+        padding: 2px 5px;
+        border-radius: 5px;
+        cursor: grab;
+    }
+#Wrapper h1 {
+    text-decoration: underline;
+    font-size: 35px;
+    color: #860e49;
+    text-align: center;
+}
+#Wrapper h2 {
+    text-decoration: underline;
+    font-size: 25px;
+    color: #860e49;
+    text-align: center;
+}
+#Wrapper h3 {
+    margin: 35px auto 0px;
+    text-align: center;
+    font-size: 15px;
+    color: #83196d;
+}
+.young {
+    background-color: white;
+}
+@media screen and (max-width:600px) {
+    .deleteBtn {
+        display: none;
+    }
+
+    .updateBtn {
+        display: none;
+    }
+
+    .delete {
+        display: none;
+    }
+
+    .update {
+        display: none;
+    }
+
+    #link {
+        color: #320909;
+        opacity: 0.5;
+        margin: 15px auto;
+    }
+
+    #links {
+        margin: 15px auto;
+    }
+
+    .textbox {
+        max-width: 50px;
+        min-width: 50px;
+    }
+
+    .link {
+        margin: 15px auto;
+    }
+
+    #tytle {
+        max-width: fit-content;
+        margin: 15px 40%;
+    }
+
+    table {
+        margin: 15px auto;
+    }
+
+    .Add {
+        margin-left: 0px;
+        margin: 0px 4%;
+        justify-content: center;
+        align-items: center;
+        max-height: 70vh;
+        max-width: 70vW;
+    }
+
+    .Display {
+        margin-left: 0px;
+        margin: 0px 4%;
+        justify-content: center;
+        align-items: center;
+        max-height: 70vh;
+        max-width: 70vW;
+    }
+
+    #Wrapper h2 {
+        justify-items: center;
+        font-size: 20px;
+        color: #860e49;
+        text-align: center;
+        margin: 0px 15%;
+        max-width: fit-content;
+    }
+
+    #Wrapper h3 {
+        margin: 35px auto 0px;
+        text-align: center;
+        font-size: 15px;
+        color: #83196d;
+        max-width: fit-content;
+        margin: 0px 30%
+    }
+
+    #Wrapper h1 {
+        text-decoration: underline;
+        font-size: 20px;
+        color: #860e49;
+        text-align: center;
+        max-width: fit-content;
+        margin: 0px 30%;
+    }
+
+    #picture {
+        max-height: 130px;
+        min-height: 130px;
+        max-width: 100px;
+        min-width: 100px;
+        margin: 0px 30%;
+    }
+}

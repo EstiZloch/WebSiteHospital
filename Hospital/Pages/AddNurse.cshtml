@@ -1,0 +1,72 @@
+﻿@page
+@{ ViewData["Page"] = "Add";}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">  הוספת אחות</div>
+<div id="inputDiv">
+    <div>
+        <div>תעודת זהות</div>
+        <input type="text" id="idNurse" class="textbox" />
+    </div>
+    <div>
+        <div>שם</div>
+        <input type="text" id="nameNurse" class="textbox" />
+    </div>
+    <div>
+        <div>כתובת</div>
+        <input type="text" id="adress" class="textbox" />
+    </div>
+    <div>
+        <div>עיר</div>
+        <select id="selectCity">
+            <option code="-1" value=" " id="emptyCity"> </option>
+            @foreach (var p in data.SELECTCity())
+            {
+                <option code="@p.codeCity" value="@p.nameCity">@p.nameCity</option>
+            }
+        </select>
+    </div>
+    <div>
+            <div>מחיר</div>
+            <input type="range" id="price" min="1000" max="8000" value="4000" class="textbox" />
+            <span id="priceText"></span>
+    </div>
+        </div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="Nurse" id="links">&lArr;חזרה </a>
+</div>
+    <span id="messege"></span>
+    <script>
+        document.getElementById("price").addEventListener('input', function (e) {
+            document.getElementById("priceText").innerHTML = e.target.value;
+        });
+        document.getElementById('Add').addEventListener('click', function (e) {
+            var data = {};
+            data['idNurse'] = document.getElementById("idNurse").value;
+            data['nameNurse'] = document.getElementById("nameNurse").value;
+            data['adress'] = document.getElementById("adress").value;
+            data['codeCity'] = document.querySelector('#selectCity').options[document.querySelector('#selectCity').selectedIndex].getAttribute("code");
+            data['price'] = document.getElementById("price").value;
+            var req = new XMLHttpRequest();
+            req.open('POST', 'API/Nurses/AddNurse', true);
+            req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            req.onload = function () {
+                console.log(req.responseText);
+                //  var data = JSON.parse(req.responseText);
+                document.getElementById('messege').innerHTML = req.responseText;
+            }
+            req.send(JSON.stringify(data));
+        });
+        document.getElementById("deleteAll").addEventListener('click', function (e) {
+             location.reload();
+        });
+        document.querySelector('#selectCity').addEventListener('change', myfunction, false);
+        function myfunction() {
+            document.querySelector('#selectCity').remove(document.querySelector('#emptyCity'));
+            document.querySelector('#selectCity').removeEventListener('change', myfunction, false);
+        }
+    </script>

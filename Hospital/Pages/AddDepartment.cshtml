@@ -1,0 +1,52 @@
+﻿@page
+@{ ViewData["Page"] = "Add";
+    List<Department> dep = data.SELECTDepartment();
+    var max = dep.Max(p => p.codeDepartment)+1;
+    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">  הוספת מחלקה</div>
+<div id="inputDiv">
+
+    <div>
+        <div>קוד מחלקה</div>
+        <input type="number" min="@max" id="codeDe" class="textbox"  value="@max" max="@max"/>
+    </div>
+    <div>
+        <div>שם מחלקה</div>
+        <input type="text" id="nameDe" class="textbox" />
+    </div>
+</div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="Department" id="links">&lArr;חזרה </a>
+</div>
+<script>
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'API/Departments/', true);
+        req.onload = function () {
+            location.reload();
+            document.getElementById("codeDe").value = req.responseText;
+            document.getElementById("codeDe").min = req.responseText;
+            document.getElementById("codeDe").max = req.responseText;
+        }
+        req.send();
+    });
+    document.getElementById('Add').addEventListener('click', function (e) {
+        var data = {};
+        data['codeDepartment'] = document.getElementById('codeDe').value;
+        data['nameDepartment'] = document.getElementById('nameDe').value;
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Departments/AddDepartment', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            //  var data = JSON.parse(req.responseText);
+            document.getElementById('messege').innerHTML = req.responseText;
+        }
+        req.send(JSON.stringify(data));
+    });
+</script>

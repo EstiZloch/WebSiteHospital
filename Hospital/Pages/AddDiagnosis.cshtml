@@ -1,0 +1,75 @@
+﻿@page
+@{ ViewData["Page"] = "Add";
+    List<Diagnosis> diag = data.SELECTDiagnosis();
+    var max = diag.Max(p => p.codeDiagnosis) + 1;
+    var index = 1;
+    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">  הוספת אבחון</div>
+<div id="inputDiv">
+    <div>
+        <div>קוד אבחון</div>
+        <input type="number" id="codeDiag" class="textbox" value="@max" max="@max" min="@max" />
+    </div>
+    <div>
+        <div>מחלקה</div>
+        <select id="selectDep">
+            <option code="-1" value=" " id="emptyDep"> </option>
+            <option >להוספת מחלקה</option>
+            @foreach (var p in data.SELECTDepartment())
+            {
+                <option code="@p.codeDepartment" value="@p.nameDepartment">@p.nameDepartment</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>אבחון</div>
+        <input type="text" id="diag" class="textbox" />
+    </div>
+        <div>
+            <div>מספר ימים</div>
+            <input type="number" id="mis" min="1" max="200" class="textbox" />
+        </div>
+</div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="Diagnoses" id="links">&lArr;חזרה </a>
+</div>
+
+<script>
+        document.getElementById('Add').addEventListener('click', function (e) {
+            var data = {};
+            data['codeDiagnosis'] = document.getElementById("codeDiag").value;
+            data['codeDepartment'] = document.querySelector('#selectDep').options[document.querySelector('#selectDep').selectedIndex].getAttribute("code");
+            data['diagnosis'] = document.getElementById("diag").value;
+            data['misDays'] = document.getElementById("mis").value;
+            var req = new XMLHttpRequest();
+            req.open('POST', 'API/Diagnosis/AddDiag', true);
+            req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            req.onload = function () {
+                document.getElementById('messege').innerHTML = req.responseText;
+            }
+            req.send(JSON.stringify(data));
+        });
+        document.getElementById("deleteAll").addEventListener('click', function (e) {
+            var req = new XMLHttpRequest();
+            req.open('GET', 'API/Diagnosis/', true);
+            req.onload = function () {
+                location.reload();
+                document.getElementById("codeDiag").value = Number(req.responseText) + 1;
+                document.getElementById("codeDiag").min = Number(req.responseText) + 1;
+                document.getElementById("codeDiag").max = Number(req.responseText) + 1;
+            }
+            req.send();
+       
+        });
+        document.querySelector('#selectDep').addEventListener('change', myfunction, false);
+        function myfunction() {
+        document.querySelector('#selectDep').remove(document.querySelector('#emptyDep'));
+        document.querySelector('#selectDep').removeEventListener('change', myfunction, false);
+    }
+</script>

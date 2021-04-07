@@ -1,0 +1,64 @@
+﻿@page
+@{ ViewData["Page"] = "Add";
+    List<Room> room = data.SELECTRoom();
+    var max = room.Max(p => p.misRoom) + 1;}
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<div id="tytle">    הוספת חדר</div>
+<div id="inputDiv">
+
+    <div>
+        <div>מספר חדר</div>
+        <input type="number" id="codeRoom" min="@max" max="@max" value="@max" class="textbox" />
+    </div>
+    <div>
+        <div>מחלקה</div>
+        <select id="selectDep">
+            <option code="-1" value=" " id="emptyDep"> </option>
+            @foreach (var p in data.SELECTDepartment())
+            {
+                <option code="@p.codeDepartment" value="@p.nameDepartment">@p.nameDepartment</option>
+            }
+        </select>
+    </div>
+    <div>
+        <div>כמות מיטות</div>
+        <input type="number" min="1" id="NumBeds" class="textbox" />
+    </div>
+</div>
+<div id="divmessege"><span id="messege"></span></div>
+<div id="linkbtn">
+    <div id="btn">
+        <div id="Add">הוספה</div>
+        <div id="deleteAll">נקה הכל</div>
+    </div>
+    <a href="Room" id="links">&lArr;חזרה </a>
+</div>
+<script>
+    document.getElementById("deleteAll").addEventListener('click', function (e) {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'API/Rooms/', true);
+        req.onload = function () {
+            location.reload();
+        }
+        req.send();
+    });
+    document.getElementById('Add').addEventListener('click', function (e) {
+        var data = {};
+        data['misRoom'] = document.getElementById('codeRoom').value;
+        data['codeDepartment'] = document.querySelector('#selectDep').options[document.querySelector('#selectDep').selectedIndex].getAttribute("code");
+        data['amountBeds'] = document.getElementById('NumBeds').value;
+        var req = new XMLHttpRequest();
+        req.open('POST', 'API/Rooms/AddRoom', true);
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        req.onload = function () {
+            document.getElementById('messege').innerHTML = req.responseText;
+        }
+        req.send(JSON.stringify(data));
+    });
+    document.querySelector('#selectDep').addEventListener('change', myfunction, false);
+    function myfunction() {
+        document.querySelector('#selectDep').remove(document.querySelector('#emptyDep'));
+        document.querySelector('#selectDep').removeEventListener('change', myfunction, false);
+    }
+</script>
